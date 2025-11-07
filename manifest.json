@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Master Control Center",
+  "version": "1.1.4",
+  "description": "Master Control Center is a privacy-first extension that launches a customizable dashboard for news, apps, games, and utilities, with all data stored locally fully customizable by the user",
+
+  "icons": {
+    "16": "assets/icon/stackdash-16.png",
+    "32": "assets/icon/stackdash-32.png",
+    "48": "assets/icon/stackdash-48.png",
+    "64": "assets/icon/stackdash-64.png",
+    "128": "assets/icon/stackdash-128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "assets/icon/stackdash-16.png",
+      "32": "assets/icon/stackdash-32.png",
+      "48": "assets/icon/stackdash-48.png"
+    },
+  "default_title": "Master Control Center"
+  },
+
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": [
+    "https://api.rawg.io/*",
+    "https://api.allorigins.win/*",
+    "https://api.uptimerobot.com/*",
+    "https://api.brandfetch.io/v2/brands/microsoft.com/*",
+
+    "https://www.steamgriddb.com/*",
+    "https://www.google.com/s2/*",
+
+    "https://status.openai.com/*",
+    "https://logo.clearbit.com/*",
+    "https://cdn.akamai.steamstatic.com/*",
+    "https://cors.isomorphic-git.org/*"
+  ],
+  "background": { "service_worker": "service-worker.js" },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dashboard.html",
+        "app-manifest.json",
+        "pwa-sw.js",
+        "assets/*"
+      ],
+
+      "matches": [ "<all_urls>" ]
+    }
+  ]
+}
