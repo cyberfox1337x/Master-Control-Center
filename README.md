@@ -142,10 +142,12 @@
 
 > Huge thanks to Benjamin S Powell (LabDash) for the original idea and inspiration.
 
+
+---
 <div align="center" style="margin-top: 20px;">
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
     <img
-      src="https://img.shields.io/badge/Made%20with%20%F0%9F%92%93%20by%20cyberfox1337x%20and%20Calixto-5C0010?style=for-the-badge&labelColor=000000"
+       src="https://img.shields.io/badge/Made%20with%20%F0%9F%92%93%20by%20cyberfox1337x%20and%20Calixto-5C0010?style=for-the-badge&labelColor=000000&color=5C0010"
       alt="Made with 💓 by cyberfox1337x and Calixto"
     />
   </a>
