@@ -3,19 +3,19 @@
 
 <!-- PROJECT SHIELDS -->
 <div align="center">
-  <a href="https://github.com/Salc-wm/Master-ControlCenter">
+  <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
     <img src="https://img.shields.io/badge/ACTIVE-success?style=for-the-badge&label=%F0%9F%9F%A2%20STATUS&labelColor=000000&color=5C0010" alt="Status" />
   </a>
-  <a href="https://github.com/Salc-wm/Master-ControlCenter/issues">
-    <img src="https://img.shields.io/github/issues/Salc-wm/Master-ControlCenter.svg?style=for-the-badge&label=%F0%9F%90%9E%20ISSUES&labelColor=000000&color=5C0010" alt="Issues" />
+  <a href="https://github.com/cyberfox1337x/Master-ControlCenter/issues">
+    <img src="https://img.shields.io/github/issues/cyberfox1337x/Master-ControlCenter.svg?style=for-the-badge&label=%F0%9F%90%9E%20ISSUES&labelColor=000000&color=5C0010" alt="Issues" />
   </a>
-  <a href="https://github.com/Salc-wm/Master-ControlCenter/blob/main/LICENSE">
+  <a href="https://github.com/cyberfox1337x/Master-ControlCenter/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%9A%96%EF%B8%8F%20LICENSE&labelColor=000000&color=444444" alt="License" />
   </a>
-  <a href="https://github.com/Salc-wm/Master-ControlCenter/commits/main">
+  <a href="https://github.com/cyberfox1337x/Master-ControlCenter/commits/main">
     <img src="https://img.shields.io/github/last-commit/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%8F%B3%20LAST%20COMMIT&labelColor=000000&color=5C0010" alt="Last Commit" />
   </a>
-  <a href="https://github.com/Salc-wm/Master-ControlCenter">
+  <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
     <img src="https://img.shields.io/badge/LOVE-red?style=for-the-badge&label=%E2%9D%A4%20MADE%20WITH&labelColor=000000&color=5C0010" alt="Made with Love" />
   </a>
 </div>
