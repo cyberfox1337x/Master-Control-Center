@@ -3,10 +3,12 @@
 <div align="center">
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
     <img src="https://img.shields.io/badge/ACTIVE-success?style=for-the-badge&label=%F0%9F%9F%A2%20STATUS&labelColor=000000&color=5C0010" alt="Status" />
-  </a>
-  <a href="https://github.com/cyberfox1337x/Master-ControlCenter/issues">
-    <img src="https://img.shields.io/github/issues/cyberfox1337x/Master-ControlCenter.svg?style=for-the-badge&label=%F0%9F%90%9E%20ISSUES&labelColor=000000&color=5C0010" alt="Issues" />
-  </a>
+  <a href="https://github.com/cyberfox1337x/Master-Control-Center/issues">
+  <img 
+    src="https://img.shields.io/github/issues/cyberfox1337x/Master-Control-Center.svg?style=for-the-badge&label=%F0%9F%90%9E%20ISSUES&labelColor=000000&color=5C0010" 
+    alt="Issues" 
+  />
+</a>
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%9A%96%EF%B8%8F%20LICENSE&labelColor=000000&color=444444" alt="License" />
   </a>
