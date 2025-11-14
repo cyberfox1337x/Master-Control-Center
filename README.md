@@ -2,21 +2,31 @@
 
 <div align="center">
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
-    <img src="https://img.shields.io/badge/ACTIVE-success?style=for-the-badge&label=%F0%9F%9F%A2%20STATUS&labelColor=000000&color=5C0010" alt="Status" />
+    <img
+      src="https://img.shields.io/badge/ACTIVE-success?style=for-the-badge&label=%F0%9F%9F%A2%20STATUS&labelColor=000000&color=5C0010"
+      alt="Status"
+    />
+  </a>
+
   <a href="https://github.com/cyberfox1337x/Master-Control-Center/issues">
-  <img 
-    src="https://img.shields.io/github/issues/cyberfox1337x/Master-Control-Center.svg?style=for-the-badge&label=%F0%9F%90%9E%20ISSUES&labelColor=000000&color=5C0010" 
-    alt="Issues" 
-  />
-</a>
+    <img
+      src="https://img.shields.io/github/issues/cyberfox1337x/Master-Control-Center.svg?style=for-the-badge&label=%F0%9F%90%9E%20ISSUES&labelColor=000000&color=5C0010"
+      alt="Issues"
+    />
+  </a>
+
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%9A%96%EF%B8%8F%20LICENSE&labelColor=000000&color=444444" alt="License" />
+    <img
+      src="https://img.shields.io/github/license/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%9A%96%EF%B8%8F%20LICENSE&labelColor=000000&color=444444"
+      alt="License"
+    />
   </a>
+
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter/commits/main">
-    <img src="https://img.shields.io/github/last-commit/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%8F%B3%20LAST%20COMMIT&labelColor=000000&color=5C0010" alt="Last Commit" />
-  </a>
-  <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
-    <img src="https://img.shields.io/badge/LOVE-red?style=for-the-badge&label=%E2%9D%A4%20MADE%20WITH&labelColor=000000&color=5C0010" alt="Made with Love" />
+    <img
+      src="https://img.shields.io/github/last-commit/Salc-wm/Master-ControlCenter?style=for-the-badge&label=%E2%8F%B3%20LAST%20COMMIT&labelColor=000000&color=5C0010"
+      alt="Last Commit"
+    />
   </a>
 </div>
 
@@ -31,19 +41,18 @@
   </p>
 </div>
 
----
 ## Security & Privacy
 
 [![Security & Privacy](https://img.shields.io/badge/🔒%20Security%20%26%20Privacy-Important-red.svg)](#security--privacy)
 
-| Aspect          | Approach                                          |
-|----------------|---------------------------------------------------|
-| Storage        | Local (extension and localStorage only)           |
-| Native Execution | Explicit command allowlist sample                |
-| Logo API Key   | Kept only in settings (not serialized per item)   |
-| IFrames        | Sandbox with opt-in permissions                   |
-| RSS            | Proxy fallback avoids noisy CORS errors           |
-| Uploads        | Size-limited; never auto-exfiltrated              |
+| Aspect            | Approach                                          |
+|------------------|---------------------------------------------------|
+| Storage          | Local (extension and localStorage only)           |
+| Native Execution | Explicit command allowlist sample                 |
+| Logo API Key     | Kept only in settings (not serialized per item)   |
+| IFrames          | Sandbox with opt-in permissions                   |
+| RSS              | Proxy fallback avoids noisy CORS errors           |
+| Uploads          | Size-limited; never auto-exfiltrated              |
 
 ---
 
@@ -62,10 +71,10 @@
 
 ### Installation (as Extension)
 
-1. Clone the repository
-2. Open `chrome://extensions` and enable Developer Mode
-3. Click **Load unpacked** and select the project root
-4. Click the extension icon to open the dashboard
+1. Clone the repository  
+2. Open `chrome://extensions` and enable **Developer Mode**  
+3. Click **Load unpacked** and select the project root  
+4. Click the extension icon to open the dashboard  
 
 ---
 
@@ -93,15 +102,6 @@
   <img src="https://i.imgur.com/SLUquLC.png" alt="Settings" style="width: 45%; object-fit: contain;"/>
   <img src="https://i.imgur.com/0TNFCvt.png" alt="Widgets" style="width: 54%; object-fit: contain;"/>
 </div>
-
----
-
-### Installation (as Extension)
-
-1. Clone the repository  
-2. Open `chrome://extensions` and enable **Developer Mode**  
-3. Click **Load unpacked** and select the project root  
-4. Click the extension icon to open the dashboard  
 
 ---
 
@@ -141,3 +141,12 @@
 </a>
 
 > Huge thanks to Benjamin S Powell (LabDash) for the original idea and inspiration.
+
+<div align="center" style="margin-top: 20px;">
+  <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
+    <img
+      src="https://img.shields.io/badge/Made%20with%20%F0%9F%92%93%20by%20cyberfox1337x%20and%20Calixto-5C0010?style=for-the-badge&labelColor=000000"
+      alt="Made with 💓 by cyberfox1337x and Calixto"
+    />
+  </a>
+</div>
