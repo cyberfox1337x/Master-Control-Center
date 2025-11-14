@@ -147,7 +147,7 @@
 <div align="center" style="margin-top: 20px;">
   <a href="https://github.com/cyberfox1337x/Master-ControlCenter">
     <img
-       src="https://img.shields.io/badge/Made%20with%20%F0%9F%92%93%20by%20cyberfox1337x%20and%20Calixto-5C0010?style=for-the-badge&labelColor=000000&color=5C0010"
+       src="https://img.shields.io/badge/%F0%9F%92%93%20LOVE%20BY%20CYBERFOX1337X%20AND%20CALIXTO-5C0010?style=for-the-badge&label=MADE%20WITH&labelColor=000000&color=5C0010"
       alt="Made with 💓 by cyberfox1337x and Calixto"
     />
   </a>
