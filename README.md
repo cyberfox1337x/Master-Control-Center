@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 <div align="center">
   <br />
-  <img src="icon/stackdash-128.png" alt="Logo" width="110" height="110" />
+  <img src="assets/icon/stackdash-128.png" alt="Logo" width="110" height="110" />
   <h1 align="center">Master Control Center</h1>
   <p align="center">
     Multi-page, local-first dashboard for links, apps and live widgets, with optional native and custom protocol launching.
@@ -110,7 +110,7 @@
 |-------|---------|
 | Layout & Interaction | Multi-page tabs, per-page groups, drag and drop ordering, edit mode toggle. |
 | Customization | Themes (system/light/dark/crimson), searchable font catalog, glow effect with safety controls. |
-| Link & Program Management | Icon modes (favicon/logo.dev/URL/upload), domain guessing, and native/program launch support. |
+| Link & Program Management | Icon modes (favicon/.dev/URL/upload), domain guessing, and native/program launch support. |
 | Widgets | Weather (Open-Meteo), RSS (proxy fallback + highlighting), UptimeRobot, sandboxed IFrame, COVID stats. |
 | Data & Persistence | Local storage, timestamped export, migration-safe IDs. |
 | Performance | Lazy icon loading, unified cache pool, idle scheduling, lean service worker. |
@@ -124,7 +124,7 @@
 | Browser Extension | Chrome MV3 (service worker + storage) |
 | Scripts | PowerShell, Batch (.bat), Python (utility GUI), Node.js (native host example) |
 | Data | JSON state + in-memory caches |
-| APIs | Open-Meteo, logo.dev, UptimeRobot, disease.sh, RSS feeds |
+| APIs | Open-Meteo, .dev, UptimeRobot, disease.sh, RSS feeds |
 
 ### Built With
 
