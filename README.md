@@ -108,7 +108,6 @@
 ## Roadmap
 
 [![Roadmap](https://img.shields.io/badge/🗺️%20Roadmap-Planned-blue.svg)](#roadmap)
-
 ---
 
 **Project Task List**
@@ -122,8 +121,7 @@
 * [ ] 🔐 Enhanced security features
 * [ ] 📈 Performance improvements
 * [ ] 🚨 Alert monitoring system
-* [ ] 🧑‍💻 Create dedicated **Meet Our Team** page
-* [ ] 🏢 Create dedicated **About Us** page
+* [ ] 🌍 Create a separate website dedicated to **Meet Our Team** and **About Us** pages
 ---
 
 ## 🙏 Acknowledgments
