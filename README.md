@@ -109,13 +109,19 @@
 
 [![Roadmap](https://img.shields.io/badge/🗺️%20Roadmap-Planned-blue.svg)](#roadmap)
 
-- [ ] Extract widget code into modular sub-files  
-- [ ] Unit tests for migrations and import  
-- [ ] Additional widgets (Grafana / Prometheus)  
-- [ ] Optional encrypted cloud sync  
-- [ ] Performance metrics panel UI  
-- [ ] Auto theme schedule  
-- [ ] Profiles / multi-config switcher  
+**Project Task List**
+
+* [ ] 🔍 Auto lookup of first and last names to collect data from multiple sources for enhanced security analysis
+* [ ] 🎮 Automated game discovery with one click launch functionality
+* [ ] 🌐 Add websites to dashboard with one click template selection and auto load
+* [ ] 📁 Add “Save to Extension” category creation panel
+* [ ] 📊 Additional widgets
+* [ ] 🔐 Enhanced security features
+* [ ] 📈 Performance improvements
+* [ ] 🚨 Alert monitoring system
+
+
+
 
 ---
 
