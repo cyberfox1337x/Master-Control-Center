@@ -109,20 +109,21 @@
 
 [![Roadmap](https://img.shields.io/badge/🗺️%20Roadmap-Planned-blue.svg)](#roadmap)
 
+---
+
 **Project Task List**
 
 * [ ] 🔍 Auto lookup of first and last names to collect data from multiple sources for enhanced security analysis
 * [ ] 🎮 Automated game discovery with one click launch functionality
-* [ ] 🌐 Add websites to dashboard with one click template selection and auto load
+* [ ] 🌐 Add websites to dashboard with one click auto load
+* [ ] ⬇️ Add dropdown option to select and load predefined templates
 * [ ] 📁 Add “Save to Extension” category creation panel
 * [ ] 📊 Additional widgets
 * [ ] 🔐 Enhanced security features
 * [ ] 📈 Performance improvements
 * [ ] 🚨 Alert monitoring system
-
-
-
-
+* [ ] 🧑‍💻 Create dedicated **Meet Our Team** page
+* [ ] 🏢 Create dedicated **About Us** page
 ---
 
 ## 🙏 Acknowledgments
