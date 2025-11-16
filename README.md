@@ -137,7 +137,6 @@
 
 ### 👨🏻‍💻 Original Credit
 
-**Original Credit:**  
 <a href="https://www.tiktok.com/@benjaminspowell">
   <img
     src="https://img.shields.io/badge/By%3A%20Benjamin%20S%20Powell%20Idea%20from%3A%20LabDash-000000?style=flat&logo=tiktok&logoColor=white"
