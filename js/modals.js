@@ -2,8 +2,16 @@
 import {
   $, uid, normaliseUrl, faviconFor,
   checkImage, guessDomainCandidates,
-  logoDevUrlForDomain, logoDevUrlForSiteUrl
+  logoDevUrlForDomain, logoDevUrlForSiteUrl,
+  escapeHtml
 } from "./utils.js";
+import {
+  collectActiveTabMetadata,
+  fallbackMetadataFromDocument,
+  selectBestIconForQuickSave,
+  buildQuickSaveLink,
+  fallbackTitleFromUrl
+} from "./quick-save.js";
 
 import { STATE, saveState, saveStateNow, getSelectedPage } from "./state.js";
 import { renderGroups } from "./render-groups.js";
@@ -35,7 +43,7 @@ export function closeModal() { $("#modal").hidden = true; }
  * @param {string} [options.confirmClass]
  * @returns {Promise<boolean>}
  */
-function showConfirmModal({ title, bodyHtml, confirmText = t('OK'), confirmClass = '' }) {
+export function showConfirmModal({ title, bodyHtml, confirmText = t('OK'), confirmClass = '' }) {
   return new Promise((resolve) => {
     const body = document.createElement('div');
     body.innerHTML = bodyHtml;
@@ -337,8 +345,161 @@ export function openResetConfirmModal() {
   openModal({ title: t('Confirm Reset'), body, footer });
 }
 
+// Quick Save (capture active tab metadata and drop into a selected group)
+export function openQuickSaveModal() {
+  const title = t("Save to Extension");
+  const entries = collectGroupEntriesWithPages();
+
+  if (!entries.length) {
+    const body = document.createElement("div");
+    body.className = "quick-save-empty";
+    body.innerHTML = `<p>${t("You need at least one group before saving links.")}</p>`;
+
+    const footer = document.createElement("div");
+    const btnCancel = document.createElement("button");
+    btnCancel.className = "btn";
+    btnCancel.textContent = t("Cancel");
+    btnCancel.addEventListener("click", closeModal);
+
+    const btnCreate = document.createElement("button");
+    btnCreate.className = "btn";
+    btnCreate.textContent = t("Add group");
+    btnCreate.addEventListener("click", () => { closeModal(); openGroupModal(); });
+
+    footer.append(btnCancel, btnCreate);
+    openModal({ title, body, footer });
+    return;
+  }
+
+  const defaultGroupId = getPreferredQuickSaveGroup(entries);
+  const selectMarkup = buildQuickSaveOptions(entries, defaultGroupId);
+
+  const body = document.createElement("div");
+  body.className = "form-grid quick-save-grid";
+  body.innerHTML = `
+    <label for="quickSaveCategory">${t("Destination category")}</label>
+    <select id="quickSaveCategory">${selectMarkup}</select>
+
+    <label>${t("Preview")}</label>
+    <div class="quick-save-preview" id="quickSavePreview">
+      <div class="tile-icon" id="quickSavePreviewIcon"></div>
+      <div class="quick-save-preview-text">
+        <div class="quick-save-preview-title" id="quickSavePreviewTitle">${t("Collecting page details...")}</div>
+        <div class="quick-save-url" id="quickSavePreviewUrl"></div>
+      </div>
+    </div>
+
+    <label>${t("Status")}</label>
+    <div id="quickSaveStatus" class="quick-save-status is-loading">${t("Collecting page details...")}</div>
+  `;
+
+  const selectEl = body.querySelector("#quickSaveCategory");
+  if (selectEl && defaultGroupId) selectEl.value = defaultGroupId;
+  const statusEl = body.querySelector("#quickSaveStatus");
+  const iconEl = body.querySelector("#quickSavePreviewIcon");
+  const titleEl = body.querySelector("#quickSavePreviewTitle");
+  const urlEl = body.querySelector("#quickSavePreviewUrl");
+
+  const footer = document.createElement("div");
+  const btnCancel = document.createElement("button");
+  btnCancel.className = "btn";
+  btnCancel.textContent = t("Cancel");
+  btnCancel.addEventListener("click", closeModal);
+
+  const btnSave = document.createElement("button");
+  btnSave.className = "btn";
+  btnSave.textContent = t("Save");
+  btnSave.disabled = true;
+
+  footer.append(btnCancel, btnSave);
+  openModal({ title, body, footer });
+
+  const groupIndex = new Map(entries.map(entry => [entry.group.id, entry]));
+  let currentMeta = null;
+
+  const setStatus = (msg, variant = "idle") => {
+    if (!statusEl) return;
+    statusEl.textContent = msg;
+    statusEl.classList.remove("is-loading", "is-error", "is-success");
+    if (variant === "loading") statusEl.classList.add("is-loading");
+    else if (variant === "error") statusEl.classList.add("is-error");
+    else if (variant === "success") statusEl.classList.add("is-success");
+  };
+
+  const updatePreview = (meta) => {
+    if (!meta || !titleEl || !urlEl || !iconEl) return;
+    const titleText = (meta.title || "").trim() || fallbackTitleFromUrl(meta.url) || t("Untitled");
+    titleEl.textContent = titleText;
+    urlEl.textContent = meta.url || "";
+    iconEl.innerHTML = "";
+
+    const iconSrc = meta.bestIcon || meta.image || meta.favicon || (meta.url ? faviconFor(meta.url) : "");
+    if (iconSrc) {
+      const img = document.createElement("img");
+      img.alt = "";
+      img.loading = "lazy";
+      img.src = iconSrc;
+      iconEl.appendChild(img);
+    } else {
+      const fallback = document.createElement("span");
+      fallback.textContent = titleText.slice(0, 1).toUpperCase() || "★";
+      iconEl.appendChild(fallback);
+    }
+  };
+
+  (async () => {
+    setStatus(t("Collecting page details..."), "loading");
+    try {
+      const meta = await collectActiveTabMetadata();
+      meta.bestIcon = await selectBestIconForQuickSave(meta);
+      currentMeta = meta;
+      updatePreview(meta);
+      setStatus(t("Page info ready."), "success");
+      btnSave.disabled = false;
+    } catch (err) {
+      console.error("[quickSave] metadata", err);
+      currentMeta = fallbackMetadataFromDocument();
+      currentMeta.bestIcon = currentMeta.favicon || "";
+      updatePreview(currentMeta);
+      setStatus(t("Couldn't capture page details. Using dashboard info instead."), "error");
+      btnSave.disabled = false;
+    }
+  })();
+
+  btnSave.addEventListener("click", async () => {
+    const destination = groupIndex.get(selectEl?.value);
+    if (!destination) {
+      setStatus(t("Please choose a category."), "error");
+      return;
+    }
+    if (!currentMeta || !currentMeta.url) {
+      setStatus(t("Unable to determine the page URL."), "error");
+      return;
+    }
+
+    btnSave.disabled = true;
+    setStatus(t("Saving link..."), "loading");
+
+    try {
+      const link = buildQuickSaveLink(currentMeta);
+      if (!Array.isArray(destination.group.links)) destination.group.links = [];
+      destination.group.links.push(link);
+      if (STATE.selectedPageId !== destination.page.id) STATE.selectedPageId = destination.page.id;
+
+      await saveStateNow();
+      renderPagesBar();
+      renderGroups();
+      closeModal();
+    } catch (err) {
+      console.error("[quickSave] save error", err);
+      setStatus(t("Failed to save link. Please try again."), "error");
+      btnSave.disabled = false;
+    }
+  });
+}
+
 /**
- * Links — Logo.dev token remains in STATE.settings.logoDevApiKey and is never
+ * Links - Logo.dev token remains in STATE.settings.logoDevApiKey and is never
  * rendered into any visible input or stored per-link. We store:
  *   iconType: "logo" and logoDomain: "<domain>"
  * Preview builds the signed URL at runtime using the key.
@@ -416,10 +577,10 @@ export function openLinkModal(groupId, linkId = null) {
   }
 
   function toggleIconInputs() {
-    const t = $("#lnkIconType").value;
-    const showLogo = t === "logo";
-    const showUrl  = t === "url";
-    const showUp   = t === "upload";
+    const iconType = $("#lnkIconType").value;
+    const showLogo = iconType === "logo";
+    const showUrl  = iconType === "url";
+    const showUp   = iconType === "upload";
 
     // Show/hide entire row pairs so the grid never “shifts left”
     showPair(".lnkLogoDomainLabel", "#lnkLogoDomainRow", showLogo, "flex");
@@ -435,18 +596,18 @@ export function openLinkModal(groupId, linkId = null) {
 
   function updatePreview() {
     const box = $("#lnkIconPreview .tile-icon"); box.innerHTML = "";
-    const t = $("#lnkIconType").value;
+    const iconType = $("#lnkIconType").value;
     let src = "";
 
-    if (t === "logo") {
+    if (iconType === "logo") {
       const key = STATE.settings?.logoDevApiKey?.trim();
       const dom = $("#lnkLogoDomain").value.trim();
       src = (key && dom) ? logoDevUrlForDomain(dom, key) : "";
       $("#lnkIconInfo").textContent = dom ? t("Logo.dev: {domain}", { domain: dom }) : t("Enter a domain to fetch a logo");
-    } else if (t === "url") {
+    } else if (iconType === "url") {
       src = $("#lnkIconUrl").value.trim();
       $("#lnkIconInfo").textContent = src ? t("Custom image URL") : "";
-    } else if (t === "upload") {
+    } else if (iconType === "upload") {
       src = uploadedDataUrl || "";
       $("#lnkIconInfo").textContent = src ? t("Uploaded image") : "";
     } else {
@@ -1317,4 +1478,44 @@ export function openProgramModal(groupId, programId = null) {
 
   footer.append(footerNote, btnCancel, btnDelete, btnSave);
   openModal({ title: isEdit ? 'Edit Program' : 'Add Program', body, footer });
+}
+
+// ---- Quick Save helpers ---------------------------------------------------
+function collectGroupEntriesWithPages() {
+  const out = [];
+  if (!Array.isArray(STATE.pages)) return out;
+  STATE.pages.forEach((page) => {
+    if (!Array.isArray(page.groups)) return;
+    page.groups.forEach((group) => out.push({ page, group }));
+  });
+  return out;
+}
+
+function getPreferredQuickSaveGroup(entries) {
+  if (!entries.length) return null;
+  const current = entries.find((entry) => entry.page.id === STATE.selectedPageId);
+  return (current || entries[0]).group.id;
+}
+
+function buildQuickSaveOptions(entries, defaultGroupId) {
+  const grouped = new Map();
+  entries.forEach(({ page, group }) => {
+    if (!grouped.has(page.id)) grouped.set(page.id, { page, groups: [] });
+    grouped.get(page.id).groups.push(group);
+  });
+
+  let html = "";
+  grouped.forEach(({ page, groups }) => {
+    if (!groups.length) return;
+    const pageName = page.name || t("Untitled");
+    html += `<optgroup label="${escapeHtml(pageName)}">`;
+    groups.forEach((group) => {
+      const selected = group.id === defaultGroupId ? " selected" : "";
+      const label = escapeHtml(group.name || t("Group"));
+      html += `<option value="${group.id}"${selected}>${label}</option>`;
+    });
+    html += "</optgroup>";
+  });
+
+  return html;
 }

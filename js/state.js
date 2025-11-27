@@ -1,70 +1,101 @@
 // state.js — default state, theme application, persistence helpers
 import { debounce } from "./utils.js";
 
-const setLinkPlace = (name, url, icon) => {
-  return {
-    id: `lnk_${Math.random().toString(36).slice(2, 8)}`,
-    title: name, url: url,
-    iconType: 'url', iconUrl: icon
-}};
+const randomId = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 8)}`;
 
-export const DEFAULT_STATE = {
-  settings: {
-    openInNewTab: true,
-    theme: "system",
-    logoDevApiKey: "",
-    editMode: true,
-    selectedFont: "inter",
-    glowEnabled: true,
-    glowColor: "#8b1234",
-    interfaceLanguage: "en"
-  },
-  pages: [
-    {
-      id: `page_${Math.random().toString(36).slice(2, 8)}`,
-      name: "Home",
-      groups: [
-        {
-          id: `grp_${Math.random().toString(36).slice(2, 8)}`,
-          name: "General",
-          links: [
-            // Router (TP-Link logo)
-            setLinkPlace("Router", "http://192.168.1.1", "https://pub-4864254888164cbeb1a8e4282a00434c.r2.dev/TP-Link%20Logo.jpeg"),
+const setLinkPlace = (name, url, icon) => ({
+  id: randomId("lnk"),
+  title: name,
+  url,
+  iconType: "url",
+  iconUrl: icon
+});
 
-            // Unraid (official logo)
-            setLinkPlace("Unraid", "http://192.168.1.95", "https://pub-4864254888164cbeb1a8e4282a00434c.r2.dev/Logo%20API%20Unraid.jpeg"),
+export function createDefaultState() {
+  const state = {
+    settings: {
+      openInNewTab: true,
+      theme: "system",
+      logoDevApiKey: "",
+      editMode: true,
+      selectedFont: "inter",
+      glowEnabled: true,
+      glowColor: "#8b1234",
+      interfaceLanguage: "en",
+      uptimeAlertsEnabled: true,
+      uptimeAlertLogs: [],
+      uptimeAlertIntervalMinutes: 5
+    },
+    pages: [
+      {
+        id: randomId("page"),
+        name: "Home",
+        groups: [
+          {
+            id: randomId("grp"),
+            name: "General",
+            links: [
+              // Router (TP-Link logo)
+              setLinkPlace("Router", "http://192.168.1.1", "https://pub-4864254888164cbeb1a8e4282a00434c.r2.dev/TP-Link%20Logo.jpeg"),
 
-            // Plex (you provided the logo.dev URL)
-            setLinkPlace("Plex", "https://plex.tv", "https://pub-4864254888164cbeb1a8e4282a00434c.r2.dev/Logo%20API%20Plex.jpeg"),
+              // Unraid (official logo)
+              setLinkPlace("Unraid", "http://192.168.1.95", "https://pub-4864254888164cbeb1a8e4282a00434c.r2.dev/Logo%20API%20Unraid.jpeg"),
 
-            // BusinessDaddy (use provided Cloudinary image)
-            setLinkPlace("BusinessDaddy", "https://businessdaddy.org/", "https://res.cloudinary.com/bettercast/image/upload/v1728737295/businessdaddy/fezm6dxyqnbscofnz8el.png"),
+              // Plex (you provided the logo.dev URL)
+              setLinkPlace("Plex", "https://plex.tv", "https://pub-4864254888164cbeb1a8e4282a00434c.r2.dev/Logo%20API%20Plex.jpeg"),
 
-            // Donate (Stripe link with your StackDash image)
-            setLinkPlace("Donate", "https://buy.stripe.com/cNi14oeVFaj7639avb5AQ0e", "assets/icon/stackdash.svg")
-          ],
+              // BusinessDaddy (use provided Cloudinary image)
+              setLinkPlace("BusinessDaddy", "https://businessdaddy.org/", "https://res.cloudinary.com/bettercast/image/upload/v1728737295/businessdaddy/fezm6dxyqnbscofnz8el.png"),
+
+              // Donate (Stripe link with your StackDash image)
+              setLinkPlace("Donate", "https://buy.stripe.com/cNi14oeVFaj7639avb5AQ0e", "assets/icon/stackdash.svg")
+            ],
             widgets: [],
             programs: []
-        }
-      ]
-    }
-  ],
-  selectedPageId: null
-};
+          }
+        ]
+      }
+    ],
+    selectedPageId: null
+  };
 
+  if (!state.selectedPageId && state.pages.length) {
+    state.selectedPageId = state.pages[0].id;
+  }
 
+  return state;
+}
+
+export const DEFAULT_STATE = createDefaultState();
 export let STATE = structuredClone(DEFAULT_STATE);
 
 /** Load state from chrome.storage, applying light migrations. */
 export async function loadState() {
-  const { state } = await chrome.storage.local.get(["state"]);
-  if (state && typeof state === "object" && Array.isArray(state.pages)) {
-    STATE = state;
+  let storedState = null;
+  try {
+    const res = await chrome.storage.local.get(["state"]);
+    storedState = res?.state ?? null;
+  } catch {
+    storedState = null;
+  }
+
+  if (isPersistedStateValid(storedState)) {
+    STATE = storedState;
   } else {
-    STATE = structuredClone(DEFAULT_STATE);
+    STATE = createDefaultState();
+    try {
+      await chrome.storage.local.set({ state: STATE });
+    } catch {}
   }
   if (!STATE.selectedPageId && STATE.pages.length) {
     STATE.selectedPageId = STATE.pages[0].id;
+  }
+  if (STATE.settings) {
+    if (STATE.settings.uptimeAlertsEnabled === undefined) STATE.settings.uptimeAlertsEnabled = true;
+    if (!Array.isArray(STATE.settings.uptimeAlertLogs)) STATE.settings.uptimeAlertLogs = [];
+    if (typeof STATE.settings.uptimeAlertIntervalMinutes !== 'number' || STATE.settings.uptimeAlertIntervalMinutes <= 0) {
+      STATE.settings.uptimeAlertIntervalMinutes = 5;
+    }
   }
   // lightweight migration: ensure each group has programs array
   try {
@@ -141,4 +172,8 @@ export function applyTheme() {
 /** Return currently selected page object. */
 export function getSelectedPage() {
   return STATE.pages.find(p => p.id === STATE.selectedPageId);
+}
+
+function isPersistedStateValid(state) {
+  return !!(state && typeof state === "object" && Array.isArray(state.pages));
 }

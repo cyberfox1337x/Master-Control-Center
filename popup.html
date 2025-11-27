@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title data-i18n="Save to Extension">Save to Extension</title>
+    <link rel="stylesheet" href="css/popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup-header">
+        <div class="popup-header-main">
+          <img src="assets/icon/stackdash-32.png" alt="" width="28" height="28" />
+          <div>
+            <p class="popup-eyebrow" data-i18n="Master Control Center">Master Control Center</p>
+            <h1 data-i18n="Save to Extension">Save to Extension</h1>
+          </div>
+        </div>
+        <button
+          id="popupExplainButton"
+          class="btn icon"
+          type="button"
+          aria-haspopup="dialog"
+          title="Explain this popup"
+          aria-label="Explain this popup"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="9" x2="12" y2="16" />
+            <circle cx="12" cy="6" r="1.1" fill="currentColor" stroke="none" />
+          </svg>
+        </button>
+      </header>
+
+      <section class="popup-body">
+        <label for="popupNewCategory" class="popup-label" data-i18n="Create a new category">Create a new category</label>
+        <div class="popup-new-category">
+          <input id="popupNewCategory" class="popup-input" type="text" placeholder="e.g., Research" />
+          <button id="popupCreateCategory" class="btn ghost" type="button" data-i18n="Add Category">Add Category</button>
+        </div>
+
+        <label for="quickSaveSelect" class="popup-label" data-i18n="Destination category">Destination category</label>
+        <select id="quickSaveSelect" class="popup-select"></select>
+        <p id="popupEmpty" class="popup-empty" hidden data-i18n="No groups yet. Open the dashboard to add one.">
+          No groups yet. Open the dashboard to add one.
+        </p>
+
+        <div class="popup-actions">
+          <button id="popupSave" class="btn primary" data-i18n="Save to Extension" disabled>Save to Extension</button>
+          <button id="popupOpenDashboard" class="btn ghost" data-i18n="Open Dashboard">Open Dashboard</button>
+        </div>
+
+        <p id="popupStatus" class="popup-status" data-i18n="Loading groups...">Loading groups...</p>
+      </section>
+    </main>
+
+    <script type="module" src="js/popup.js"></script>
+  </body>
+</html>

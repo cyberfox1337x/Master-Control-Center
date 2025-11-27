@@ -1,7 +1,7 @@
 // events.js — central click delegation
 import { $ } from "./utils.js";
 import { exportJson, handleResetAll } from "./actions.js";
-import { openPageModal, handleDeletePage, openGroupModal, deleteGroup, openLinkModal, closeModal } from "./modals.js";
+import { openPageModal, handleDeletePage, openGroupModal, deleteGroup, openLinkModal, closeModal, openQuickSaveModal } from "./modals.js";
 import { toggleGroupEdit } from "./render-groups.js";
 
 /** Attach single document click listener handling [data-action] elements (delegation). */
@@ -47,6 +47,9 @@ export function wireClickDelegation() {
         openGroupModal(); break;
       case "deleteGroup":
         deleteGroup(btn.dataset.groupId); break;
+
+      case "quickSave":
+        openQuickSaveModal(); break;
 
       case "addLink":
         openLinkModal(btn.dataset.groupId); break;

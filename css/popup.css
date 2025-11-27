@@ -1,0 +1,239 @@
+:root {
+  color-scheme: dark;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --panel: #15141a;
+  --panel-2: #1e1d25;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #f46a3a;
+  --text: #f5f4ff;
+  --muted: rgba(255, 255, 255, 0.65);
+  --danger: #ff5c7a;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  min-width: 360px;
+  width: min(420px, 100vw);
+}
+
+body {
+  background: var(--panel);
+  color: var(--text);
+  padding: 16px;
+}
+
+.popup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.popup-header-main {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.popup-header img {
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.popup-header h1 {
+  font-size: 1.05rem;
+  margin: 2px 0 0;
+}
+
+.popup-eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.popup-body {
+  display: grid;
+  gap: 10px;
+}
+
+.popup-label {
+  font-size: 0.92rem;
+}
+
+.popup-input,
+.popup-select {
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  padding: 8px;
+  background: var(--panel-2);
+  color: var(--text);
+  width: 100%;
+}
+
+.popup-input::placeholder {
+  color: var(--muted);
+}
+
+.popup-new-category {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.popup-new-category .btn {
+  flex: 0 0 auto;
+  min-width: auto;
+  padding: 8px 16px;
+}
+
+.popup-new-category .popup-input {
+  flex: 1 1 180px;
+}
+
+.popup-select:disabled {
+  opacity: 0.6;
+}
+
+.popup-empty {
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.popup-actions .btn {
+  flex: 1 1 140px;
+  min-width: 140px;
+}
+
+.btn {
+  border-radius: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  flex: 1;
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+  transform: translateY(-1px);
+}
+
+.btn.icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+}
+
+.btn.icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--text);
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.btn.icon:hover {
+  border-color: #0f4019;
+  background: rgba(15, 64, 25, 0.15);
+}
+
+.btn.icon.is-active {
+  border-color: #0f4019;
+  background: rgba(15, 64, 25, 0.2);
+}
+
+.btn.icon.is-active svg {
+  stroke: #9fe6b5;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  background: linear-gradient(180deg, #ff7a45, #f05b29);
+  border-color: transparent;
+  color: #000;
+  font-weight: 600;
+}
+
+#popupSave {
+  background: #651010;
+  border-color: #3a0808;
+  color: #fff;
+}
+
+#popupSave:hover:not(:disabled) {
+  background: #0f4019;
+  border-color: #0f4019;
+  color: #e6ffe6;
+}
+
+#popupSave:disabled {
+  background: rgba(101, 16, 16, 0.45);
+  border-color: rgba(58, 8, 8, 0.6);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+#popupOpenDashboard,
+#popupCreateCategory {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+#popupOpenDashboard:hover:not(:disabled),
+#popupCreateCategory:hover:not(:disabled) {
+  background: #0f4019;
+  border-color: #0f4019;
+  color: #e6ffe6;
+}
+
+
+.btn.primary:disabled {
+  background: linear-gradient(180deg, rgba(255,122,69,0.35), rgba(240,91,41,0.35));
+  color: rgba(0,0,0,0.6);
+}
+
+.btn.ghost {
+  background: transparent;
+}
+
+.popup-status {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 4px 0 0;
+  min-height: 1.2em;
+}
+
+.popup-status.success { color: #7be196; }
+.popup-status.error { color: var(--danger); }
+.popup-status.loading { color: var(--muted); }

@@ -10,11 +10,92 @@ import { openLinkModal, deleteGroup, openGroupSizeModal } from "./modals.js";
 import { t } from "./languages/i18n.js";
 
 let groupFlyoutBound = false;
+if (!window.__uptimeAlertState) {
+  window.__uptimeAlertState = { lastStatus: {}, lastAlertAt: {} };
+}
 
 export function toggleGroupEdit(groupId) {
   if (EDIT_GROUPS.has(groupId)) EDIT_GROUPS.delete(groupId);
   else EDIT_GROUPS.add(groupId);
   renderGroups();
+}
+
+function showUptimeAlertToast(name, iso) {
+  try {
+    let stack = document.querySelector('.uptime-alert-stack');
+    if (!stack) {
+      stack = document.createElement('div');
+      stack.className = 'uptime-alert-stack';
+      document.body.appendChild(stack);
+    }
+    const div = document.createElement('div');
+    div.className = 'uptime-alert';
+    const dt = iso ? new Date(iso) : new Date();
+    const dateStr = dt.toLocaleDateString();
+    const timeStr = dt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    div.innerHTML = `
+      <div class="head">
+        <div class="title">⚠ WARNING!</div>
+        <button class="close" aria-label="Close">✕</button>
+      </div>
+      <div class="body">${escapeHtml(name || 'Monitor')}</div>
+      <div class="time">Monitor reported down</div>
+      <div class="time">Date: ${escapeHtml(dateStr)}</div>
+      <div class="time">Time: ${escapeHtml(timeStr)}</div>
+    `;
+    div.querySelector('.close').addEventListener('click', () => div.remove());
+    stack.appendChild(div);
+    setTimeout(() => { div.remove(); }, 8000);
+  } catch {}
+}
+
+function logUptimeDownEvent(monitorName, ipOrUrl, iso) {
+  if (!iso) return;
+  if (!STATE.settings.uptimeAlertsEnabled) return;
+  if (!Array.isArray(STATE.settings.uptimeAlertLogs)) STATE.settings.uptimeAlertLogs = [];
+  const entry = {
+    monitorName: monitorName || '',
+    ipOrUrl: ipOrUrl || '',
+    status: 'down',
+    dateTimeDown: iso
+  };
+  STATE.settings.uptimeAlertLogs.unshift(entry);
+  STATE.settings.uptimeAlertLogs = STATE.settings.uptimeAlertLogs
+    .sort((a,b)=> (b.dateTimeDown||'').localeCompare(a.dateTimeDown||''))
+    .slice(0, 200);
+  saveState();
+  window.dispatchEvent(new CustomEvent('uptimeLogUpdated'));
+}
+
+function handleUptimeDownTransition(monitor) {
+  if (!monitor) return;
+  const id = monitor.id || monitor.monitor_id || monitor.url || monitor.friendly_name;
+  if (!id) return;
+  const status = monitor.status;
+  const prev = window.__uptimeAlertState.lastStatus[id];
+  window.__uptimeAlertState.lastStatus[id] = status;
+  const isDown = status !== 2;
+  if (!isDown) return;
+  const logs = Array.isArray(monitor.logs) ? monitor.logs.slice().sort((a,b)=> (b.datetime||0)-(a.datetime||0)) : [];
+  const downLog = logs.find(l => l && l.type === 1 && l.datetime);
+  if (!downLog) return;
+  const iso = new Date(downLog.datetime * 1000).toISOString();
+  const name = monitor.friendly_name || monitor.url || String(id);
+  const ipOrUrl = monitor.url || monitor.url_address || monitor.ip || monitor.url_ip || '';
+  if (STATE.settings.uptimeAlertsEnabled === false) return;
+  const intervalMin = Math.min(60, Math.max(1, STATE.settings.uptimeAlertIntervalMinutes || 5));
+  const intervalMs = intervalMin * 60 * 1000;
+  const downMs = downLog.datetime * 1000;
+  const lastAlertAt = window.__uptimeAlertState.lastAlertAt[id] || downMs;
+  const now = Date.now();
+  const statusChanged = prev !== status;
+  const anchor = Math.max(lastAlertAt, downMs); // base on downtime to avoid waiting full interval after slider changes
+  const due = (now - anchor) >= intervalMs;
+  if (statusChanged || due) {
+    window.__uptimeAlertState.lastAlertAt[id] = now;
+    showUptimeAlertToast(name, iso);
+    logUptimeDownEvent(name, ipOrUrl, iso);
+  }
 }
 
 export function renderGroups() {
@@ -130,7 +211,7 @@ export function renderGroups() {
 
       function performFetch(apiKey, resolve) {
         const store = uptimeCache.store; const ts = uptimeCache.ts;
-        const payload = new URLSearchParams({ api_key: apiKey, format:'json', logs:'0', custom_uptime_ratios:'1' });
+        const payload = new URLSearchParams({ api_key: apiKey, format:'json', logs:'1', logs_limit:'5', custom_uptime_ratios:'1' });
         const endpoint = 'https://api.uptimerobot.com/v2/getMonitors';
         const proxyChain = [
           endpoint,
@@ -926,6 +1007,7 @@ export function renderGroups() {
               if (w.options.monitorIndex == null) { const siblings = g.widgets.filter(x => x.type==='uptime-robot'); w.options.monitorIndex = siblings.indexOf(w); saveState(); }
               const chosen = data.monitors[w.options.monitorIndex % data.monitors.length];
               renderMonitor(chosen);
+              handleUptimeDownTransition(chosen);
             };
             const scheduleFetch = () => {
               window.__uptimeRobotMgr.get(apiKey)

@@ -44,6 +44,15 @@ function render() {
 
   $(".modal-backdrop")?.addEventListener("click", closeModal);
 
+  if (chrome?.runtime?.onMessage) {
+    chrome.runtime.onMessage.addListener(async (msg) => {
+      if (msg?.type === "sd-state-updated") {
+        await loadState();
+        render();
+      }
+    });
+  }
+
   // Program launch stub (future native messaging hook)
   window.__stackdashLaunchProgram = (program) => { try { chrome.runtime.sendMessage({ type: 'launchProgram', program }); } catch {} };
 })();

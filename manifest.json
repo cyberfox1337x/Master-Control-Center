@@ -17,10 +17,11 @@
       "32": "assets/icon/stackdash-32.png",
       "48": "assets/icon/stackdash-48.png"
     },
-  "default_title": "Master Control Center"
+    "default_title": "Master Control Center",
+    "default_popup": "popup.html"
   },
 
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "tabs", "scripting", "nativeMessaging"],
   "host_permissions": [
     "https://api.rawg.io/*",
     "https://api.allorigins.win/*",

@@ -49,6 +49,8 @@
               <button role="tab" id="tab-data"      data-tab="data"      aria-controls="panel-data"      aria-selected="false" data-i18n="Data">Data</button>
               <button role="tab" id="tab-api"       data-tab="api"       aria-controls="panel-api"       aria-selected="false" data-i18n="APIS">APIS</button>
               <button role="tab" id="tab-advanced"  data-tab="advanced"  aria-controls="panel-advanced"  aria-selected="false" data-i18n="Advanced">Advanced</button>
+              <button role="tab" id="tab-repair"    data-tab="repair"    aria-controls="panel-repair"    aria-selected="false" title="Curated diagnostics and repair" aria-label="PC/Fixes">PC/Fixes</button>
+              <button role="tab" id="tab-logs"      data-tab="logs"      aria-controls="panel-logs"      aria-selected="false">Logs</button>
               <button role="tab" id="tab-credits"   data-tab="credits"   aria-controls="panel-credits"   aria-selected="false" data-i18n="Credits">Credits</button>
             </div>
 
@@ -141,6 +143,8 @@
                   </div>
                   <small class="muted" data-i18n="Turn off to hide menus, drag handles, and add buttons.">Turn off to hide menus, drag handles, and add buttons.</small>
                 </section>
+                <section>
+                </section>
               </div>
 
               <!-- Data Tab -->
@@ -191,6 +195,84 @@
                     </label>
                   </div>
                   <small class="muted" data-i18n="Adjust in-memory cache pruning (weather, RSS, etc.). ">Adjust in-memory cache pruning (weather, RSS, etc.). </small>
+                </section>
+              </div>
+
+              <!-- Terminal / Repair Tab -->
+              <div id="panel-repair" class="tab-panel" role="tabpanel" aria-labelledby="tab-repair" hidden>
+                <section>
+                  <h3>Terminal / Repair</h3>
+                  <p class="muted">Run vetted PowerShell diagnostics and fixes. Commands are whitelisted; output and validation will appear below.</p>
+                  <div class="repair-legend">
+                    <span class="repair-badge safe">Safe</span>
+                    <span class="muted" style="margin-right:12px;">routine diagnostics</span>
+                    <span class="repair-badge danger">Caution</span>
+                    <span class="muted">may interrupt services or require admin</span>
+                  </div>
+                  <div id="repairCommandGroups" class="repair-grid" aria-live="polite"></div>
+                </section>
+                <section>
+                  <div class="repair-log-header">
+                    <div>
+                      <h3 style="margin:0;">Session output</h3>
+                      <p class="muted" style="margin:4px 0 0;">Recent runs with 1-2 line validation summaries.</p>
+                    </div>
+                    <button id="repairLogClear" class="btn small" type="button">Clear log</button>
+                  </div>
+                  <div id="repairLog" class="repair-log" role="log" aria-live="polite" aria-label="Repair command output log"></div>
+                </section>
+              </div>
+
+              <div id="panel-logs" class="tab-panel" role="tabpanel" aria-labelledby="tab-logs" hidden>
+                <section>
+                  <h3>Logs</h3>
+                  <p class="muted">Uptime alert history (newest first). Entries are stored locally.</p>
+                  <div class="form-grid" style="grid-template-columns:auto;align-items:center;">
+                    <label class="switch" style="justify-self:start;" aria-label="Red status alert notifications">
+                      <input id="prefUptimeAlerts" type="checkbox" />
+                      <span class="switch-track" aria-hidden="true"></span>
+                      <span class="switch-label-on" aria-hidden="true">On</span>
+                      <span class="switch-label-off" aria-hidden="true">Off</span>
+                    </label>
+                  </div>
+                  <div class="form-grid" style="grid-template-columns: 200px 1fr; align-items: center;">
+                    <label for="prefUptimeAlertInterval">Alert repeat interval</label>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="range" id="prefUptimeAlertInterval" min="1" max="60" step="1" />
+                      <span id="prefUptimeAlertIntervalLabel" style="min-width:50px;display:inline-block;">5 min</span>
+                    </div>
+                  </div>
+                  <div class="uptime-log-wrap">
+                    <div class="uptime-log-head">
+                      <span>Log monitoring</span>
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <button id="uptimeLogClear" class="btn small" type="button">Clear</button>
+                        <span class="muted" style="font-size:0.85rem;">Newest first</span>
+                      </div>
+                    </div>
+                    <div class="uptime-export-row">
+                      <span class="muted" style="font-size:0.9rem;">Download:</span>
+                      <div class="uptime-export-buttons">
+                        <button class="btn small" id="uptimeExportJson" type="button">JSON</button>
+                        <button class="btn small" id="uptimeExportTxt" type="button">TXT</button>
+                        <button class="btn small" id="uptimeExportPdf" type="button">PDF</button>
+                      </div>
+                    </div>
+                    <div id="uptimeLogList" class="uptime-log-list"></div>
+                  </div>
+                  <div class="uptime-chart-card">
+                    <div class="uptime-chart-head">
+                      <div>
+                        <div class="uptime-chart-title">Alerts summary</div>
+                        <div class="muted" style="font-size:0.9rem;">Devices, total pings logged, and tabs count.</div>
+                      </div>
+                      <div id="uptimeChartTotals" class="uptime-chart-totals"></div>
+                    </div>
+                    <div class="uptime-chart-grid">
+                      <canvas id="uptimePieCanvas" width="260" height="260" aria-label="Alerts summary pie chart"></canvas>
+                      <div id="uptimePieLegend" class="uptime-pie-legend"></div>
+                    </div>
+                  </div>
                 </section>
               </div>
 
