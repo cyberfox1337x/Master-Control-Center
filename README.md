@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 <div align="center">
   <br /> 
-  <img src="icon/stackdash-128.png" alt="Logo" width="110" height="110" />
+  <img src="assets/icon/stackdash-128.png" alt="Logo" width="110" height="110" />
   <h1 align="center">Master Control Center</h1>
   <p align="center">
     Multi-page, local-first dashboard for links, apps and live widgets, with optional native and custom protocol launching.
