@@ -23,7 +23,7 @@
 
 <!-- PROJECT LOGO -->
 <div align="center">
-  <br />
+  <br /> 
   <img src="icon/stackdash-128.png" alt="Logo" width="110" height="110" />
   <h1 align="center">Master Control Center</h1>
   <p align="center">
